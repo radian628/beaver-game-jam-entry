@@ -19,7 +19,6 @@ function updateSingleProjType<T extends (Tower | Enemy)>(projList: Projectile[],
 
 export function updateProjectiles(game: GameState) {
     updateSingleProjType(game.towerProjectiles, game.enemies);
-    //updateSingleProjType(game.enemyProjectiles, game.towers);
     game.enemyProjectiles.forEach(proj => {
         proj.onMove(proj);
         proj.lifetimeRemaining--;

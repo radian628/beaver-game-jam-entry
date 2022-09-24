@@ -1,16 +1,16 @@
-import { getMousePos, keycombo } from "./controls.mjs";
+import { getMousePos, keycombo, keycomboindex } from "./controls.mjs";
 import { GameState, Projectile, Tower, TowerType } from "./game_state.mjs";
 
-function getAngleToMouse(xp: number, yp: number) {
+export function getAngleToMouse(xp: number, yp: number) {
     const { x, y } = getMousePos();
     return Math.atan2(y - yp, x - xp);
 }
 
 export function createDefaultTower(x: number, y: number, fireKeys: string[]): Tower {
 
-    let fireCooldown = 30;
+    let fireCooldown = 5;
 
-    let fireTimeRemaining = 30;
+    let fireTimeRemaining = 5;
 
     return {
         x, y,
@@ -18,6 +18,7 @@ export function createDefaultTower(x: number, y: number, fireKeys: string[]): To
         maxHP: 100,
         ammo: 10,
         maxAmmo: 10,
+        fireKeyIndices: fireKeys.map(e => -1),
         fireKeys,
         type: TowerType.DEFAULT,
         onFire: (tower: Tower) => {
@@ -54,7 +55,7 @@ export function createDefaultTower(x: number, y: number, fireKeys: string[]): To
 export function updateTowers(game: GameState) {
     game.towers.forEach(tower => {
         tower.onUpdate(tower);
-        if (keycombo(...tower.fireKeys)) {
+        if (keycomboindex(tower.fireKeys, tower.fireKeyIndices)) {
             const projectile = tower.onFire(tower);
             if (projectile) game.towerProjectiles.push(projectile);
         }

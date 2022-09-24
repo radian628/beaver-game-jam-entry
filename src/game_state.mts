@@ -12,8 +12,11 @@ export enum TowerType {
     DEFAULT
 }
 
-export const towerTextures: Record<TowerType, string> = {
-    [TowerType.DEFAULT]: "./assets/default_tower.png"
+export const towerTextures: Record<TowerType, { base: string, cannon: string }> = {
+    [TowerType.DEFAULT]: {
+        base: "./assets/tower_base.png",
+        cannon: "./assets/tower_cannon.png"
+    }
 }
 // player-controlled towers
 export type Tower = {
@@ -24,6 +27,7 @@ export type Tower = {
     ammo: number,
     maxAmmo: number,
     fireKeys: string[],
+    fireKeyIndices: number[],
     type: TowerType,
     onFire: (tower: Tower) => Projectile | undefined,
     onUpdate: (tower: Tower) => void
