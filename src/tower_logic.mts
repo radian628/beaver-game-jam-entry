@@ -16,6 +16,8 @@ export function createDefaultTower(x: number, y: number, fireKeys: string[]): To
         x, y,
         hp: 100,
         maxHP: 100,
+        ammo: 10,
+        maxAmmo: 10,
         fireKeys,
         type: TowerType.DEFAULT,
         onFire: (tower: Tower) => {
