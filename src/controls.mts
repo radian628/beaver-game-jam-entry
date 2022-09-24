@@ -35,10 +35,23 @@ window.addEventListener("mousemove", e => {
         viewBottom -= e.movementY * factor;
     }
     mousePos = {
-        x: e.clientX,
-        y: e.clientY
+        x: e.clientX * factor + viewTopLeft.x,
+        y: e.clientY * factor + viewTopLeft.y
     };
-})
+});
+
+window.addEventListener("wheel", e => {
+    const amount = Math.sign(e.deltaY);
+    const factor = amount * 0.05 + 1;
+
+    const centerY = (viewTopLeft.y + viewBottom) / 2;
+    const centerX = viewTopLeft.x + (centerY - viewTopLeft.y) * window.innerWidth / window.innerHeight;
+
+    viewTopLeft.x = centerX + factor * (viewTopLeft.x - centerX);
+    viewTopLeft.y = centerY + factor * (viewTopLeft.y - centerY);
+    viewBottom = centerY + factor * (viewBottom - centerY);
+    console.log(viewTopLeft, viewBottom);
+});
 
 export function keycombo(...keys: string[]) {
     return keys.reduce((prev, curr) => prev && (keysDown.get(curr) ?? false), true);
