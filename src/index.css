@@ -1,3 +1,8 @@
+@font-face {
+    font-family: 'TexGyreAdventor';
+    src: url('assets/tex-gyre-adventor.bold.otf');
+}
+
 :root, html, body{
     margin: 0;
     padding: 0;
