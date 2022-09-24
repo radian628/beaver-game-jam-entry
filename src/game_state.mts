@@ -21,6 +21,8 @@ export type Tower = {
     y: number,
     hp: number,
     maxHP: number,
+    ammo: number,
+    maxAmmo: number,
     fireKeys: string[],
     type: TowerType,
     onFire: (tower: Tower) => Projectile | undefined,
@@ -41,8 +43,8 @@ export type Enemy = {
     hp: number,
     maxHP: number,
     type: EnemyType,
-    onFire: (enemy: Enemy) => Projectile,
-    onUpdate: (enemy: Enemy) => void
+    onFire: (enemy: Enemy, game: GameState) => Projectile | undefined,
+    onUpdate: (enemy: Enemy, game: GameState) => void
 }
 
 export enum Screen {
@@ -56,5 +58,11 @@ export type GameState = {
     towerProjectiles: Projectile[],
     enemyProjectiles: Projectile[]
     money: number,
-    screen: Screen
+    screen: Screen,
+    home: {
+        x: number,
+        y: number,
+        hp: number,
+        maxHP: number
+    }
 }
