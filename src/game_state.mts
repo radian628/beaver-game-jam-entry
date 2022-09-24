@@ -3,8 +3,9 @@ export type Projectile = {
     x: number,
     y: number,
     lifetimeRemaining: number,
-    onMove: () => void,
-    onHitTarget: (target: { hp: number }) => void
+    onMove: (proj: Projectile) => void,
+    onHitTarget: (target: { hp: number }, proj: Projectile) => void,
+    radius: number
 }
 
 export enum TowerType {
@@ -22,7 +23,8 @@ export type Tower = {
     maxHP: number,
     fireKeys: string[],
     type: TowerType,
-    onFire: (tower: Tower) => Projectile
+    onFire: (tower: Tower) => Projectile | undefined,
+    onUpdate: (tower: Tower) => void
 }
 
 export enum EnemyType {
@@ -39,10 +41,11 @@ export type Enemy = {
     hp: number,
     maxHP: number,
     type: EnemyType,
-    onFire: (enemy: Enemy) => Projectile
+    onFire: (enemy: Enemy) => Projectile,
+    onUpdate: (enemy: Enemy) => void
 }
 
-enum Screen {
+export enum Screen {
     TITLE, GAME
 }
 
