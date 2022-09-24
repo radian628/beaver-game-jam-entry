@@ -7,6 +7,13 @@ export type Projectile = {
     onHitTarget: (target: { hp: number }) => void
 }
 
+export enum TowerType {
+    DEFAULT
+}
+
+export const towerTextures: Record<TowerType, string> = {
+    [TowerType.DEFAULT]: "./assets/default_tower.png"
+}
 // player-controlled towers
 export type Tower = {
     x: number,
@@ -14,16 +21,29 @@ export type Tower = {
     hp: number,
     maxHP: number,
     fireKeys: string[],
+    type: TowerType,
     onFire: (tower: Tower) => Projectile
 }
 
+export enum EnemyType {
+    DEFAULT
+}
+
+export const enemyTextures: Record<EnemyType, string> = {
+    [EnemyType.DEFAULT]: "./assets/default_enemy.png"
+}
 // game enemies
 export type Enemy = {
     x: number,
     y: number,
     hp: number,
     maxHP: number,
+    type: EnemyType,
     onFire: (enemy: Enemy) => Projectile
+}
+
+enum Screen {
+    TITLE, GAME
 }
 
 // single monolithic object containing the entire state of the game
@@ -32,5 +52,6 @@ export type GameState = {
     enemies: Enemy[],
     towerProjectiles: Projectile[],
     enemyProjectiles: Projectile[]
-    money: number
+    money: number,
+    screen: Screen
 }
