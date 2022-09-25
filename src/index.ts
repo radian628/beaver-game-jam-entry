@@ -1,7 +1,7 @@
 import { getMousePos, keycombo, viewBottom, viewTopLeft } from "./controls.mjs";
 import { getimg } from "./draw.mjs";
 import { createDefaultEnemy, updateEnemies } from "./enemy_logic.mjs";
-import { GameState, Screen, towerTextures } from "./game_state.mjs";
+import { enemyTextures, GameState, Screen, towerTextures } from "./game_state.mjs";
 import { updateProjectiles } from "./projectile_logic.mjs";
 import { createDefaultTower, getAngleToMouse, updateTowers } from "./tower_logic.mjs";
 
@@ -34,6 +34,13 @@ game.enemies.push(
     createDefaultEnemy(300, 300),
 )
 
+function drawOutlinedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "white";
+    ctx.strokeText(text, x, y);
+    ctx.fillText(text, x, y);
+}
+
 async function gameLoop() {
     if (!ctx) {
         window.alert("Failed to create canvas context.");
@@ -42,11 +49,20 @@ async function gameLoop() {
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = "48px TexGyreAdventor";
+    drawOutlinedText(ctx, "Ammo: " + game.money, 10, 50);
 
     const sf = window.innerHeight / (viewBottom - viewTopLeft.y);
     ctx.scale(sf, sf);
     ctx.translate(-viewTopLeft.x, -viewTopLeft.y);
 
+    ctx.fillStyle = "red";
+    game.towerProjectiles.forEach(t => {
+        ctx.fillRect(t.x - 2, t.y - 2, 4, 4);
+    });
+    game.enemyProjectiles.forEach(t => {
+        ctx.fillRect(t.x - 2, t.y - 2, 4, 4);
+    });
     for (let t of game.towers) {
         ctx.save();
         ctx.drawImage(await getimg(towerTextures[t.type].base), t.x - 25, t.y - 25, 50, 50);
@@ -65,16 +81,19 @@ async function gameLoop() {
         ctx.fillText(t.fireKeys.join("+"), 0, 10);
         ctx.restore();
     }
-    ctx.fillStyle = "red";
-    game.enemies.forEach(t => {
-        ctx.fillRect(t.x - 5, t.y - 5, 10, 10);
-    });
-    game.towerProjectiles.forEach(t => {
-        ctx.fillRect(t.x - 2, t.y - 2, 4, 4);
-    });
-    game.enemyProjectiles.forEach(t => {
-        ctx.fillRect(t.x - 2, t.y - 2, 4, 4);
-    });
+    for (let t of game.enemies) {
+        ctx.save();
+        ctx.translate(t.x, t.y);
+        ctx.drawImage(await getimg(enemyTextures[t.type]), -25, -25, 50, 50);
+        ctx.restore();
+    }
+
+
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.lineWidth = 10;
+    ctx.font = "48px TexGyreAdventor";
+    drawOutlinedText(ctx, "Ammo: " + game.money, 10, 50);
 
     updateTowers(game);
     updateEnemies(game);

@@ -1,6 +1,7 @@
 const keysDown = new Map<string, boolean>();
 const keysDownIndex = new Map<string, number>();
 let mousePos = { x: 0, y: 0 }
+let mousePosScreen = { x: 0, y: 0 }
 
 let mouseDown = false;
 
@@ -29,16 +30,41 @@ document.addEventListener("mouseup", e => {
 
 window.addEventListener("mousemove", e => {
     const factor = (viewBottom - viewTopLeft.y) / window.innerHeight;
-    if (mouseDown) {
-        viewTopLeft.x -= e.movementX * factor;
-        viewTopLeft.y -= e.movementY * factor;
-        viewBottom -= e.movementY * factor;
-    }
+    // if (mouseDown) {
+    //     viewTopLeft.x -= e.movementX * factor;
+    //     viewTopLeft.y -= e.movementY * factor;
+    //     viewBottom -= e.movementY * factor;
+    // }
     mousePos = {
         x: e.clientX * factor + viewTopLeft.x,
         y: e.clientY * factor + viewTopLeft.y
     };
+    mousePosScreen = {
+        x: e.clientX,
+        y: e.clientY
+    };
 });
+
+function controlLoop() {
+    let movementX = 0;
+    let movementY = 0;
+    
+    let xpercent = mousePosScreen.x / window.innerWidth * 100;
+    let ypercent = mousePosScreen.y / window.innerHeight * 100;
+    if (xpercent > 70) movementX = -Math.min(40, 1 / (1 - xpercent * 0.01));
+    if (xpercent < 30) movementX = Math.min(40, 1 / (xpercent * 0.01));
+    if (ypercent > 70) movementY = -Math.min(40, 1 / (1 - ypercent * 0.01));
+    if (ypercent < 30) movementY = Math.min(40, 1 / (ypercent * 0.01));;
+
+    const factor = (viewBottom - viewTopLeft.y) / window.innerHeight;
+    //if (mouseDown) {
+        viewTopLeft.x -= movementX * factor;
+        viewTopLeft.y -= movementY * factor;
+        viewBottom -= movementY * factor;
+    //}
+    requestAnimationFrame(controlLoop);
+}
+controlLoop();
 
 window.addEventListener("wheel", e => {
     const amount = Math.sign(e.deltaY);

@@ -38,7 +38,7 @@ export enum EnemyType {
 }
 
 export const enemyTextures: Record<EnemyType, string> = {
-    [EnemyType.DEFAULT]: "./assets/default_enemy.png"
+    [EnemyType.DEFAULT]: "./assets/enemy.png"
 }
 // game enemies
 export type Enemy = {
@@ -47,6 +47,7 @@ export type Enemy = {
     hp: number,
     maxHP: number,
     type: EnemyType,
+    radius: number,
     onFire: (enemy: Enemy, game: GameState) => Projectile | undefined,
     onUpdate: (enemy: Enemy, game: GameState) => void
 }
