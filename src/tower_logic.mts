@@ -8,9 +8,9 @@ export function getAngleToMouse(xp: number, yp: number) {
 
 export function createDefaultTower(x: number, y: number, fireKeys: string[]): Tower {
 
-    let fireCooldown = 5;
+    let fireCooldown = 30;
 
-    let fireTimeRemaining = 5;
+    let fireTimeRemaining = 30;
 
     return {
         x, y,
@@ -39,7 +39,7 @@ export function createDefaultTower(x: number, y: number, fireKeys: string[]): To
                     proj.y += dy;
                 },
                 onHitTarget: (target, proj) => {
-                    target.hp -= 15;
+                    target.hp -= 35;
                     proj.lifetimeRemaining = 0;
                 },
                 radius: 10,

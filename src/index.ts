@@ -30,10 +30,6 @@ game.towers.push(
     createDefaultTower(40, 500, ["C"]),
 )
 
-game.enemies.push(
-    createDefaultEnemy(300, 300),
-)
-
 function drawOutlinedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
     ctx.strokeStyle = "black";
     ctx.fillStyle = "white";
@@ -57,6 +53,13 @@ function isRepeatKeybind(keys: string[]) {
 }
 
 async function gameLoop() {
+
+    if (Math.random() > 0.98) {
+        game.enemies.push(
+            createDefaultEnemy(Math.random() * 3000 - 1500, Math.random() * 3000 - 1500),
+        )
+    }
+
     if (rightMouseDown && getAllKeysDown().length != 0 && !isRepeatKeybind(getAllKeysDown())) {
         setRightMouseDown(false);
         const mousepos = getMousePos();
@@ -80,10 +83,10 @@ async function gameLoop() {
 
     ctx.fillStyle = "red";
     game.towerProjectiles.forEach(t => {
-        ctx.fillRect(t.x - 2, t.y - 2, 4, 4);
+        ctx.fillRect(t.x - 4, t.y - 4, 8, 8);
     });
     game.enemyProjectiles.forEach(t => {
-        ctx.fillRect(t.x - 2, t.y - 2, 4, 4);
+        ctx.fillRect(t.x - 4, t.y - 4, 8, 8);
     });
     for (let t of game.towers) {
         ctx.save();
