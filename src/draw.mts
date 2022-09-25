@@ -83,6 +83,18 @@ export async function drawGame(ctx: CanvasRenderingContext2D, game: GameState){
         ctx.drawImage(await getimg(enemyTextures[t.type]), -25, -25, 50, 50);
         ctx.restore();
     }
+    for (let t of game.resources) {
+        ctx.save();
+        ctx.translate(t.x, t.y);
+        drawOutlinedText(ctx, "$", 0, 0);
+        ctx.restore();
+    }
+    for (let t of game.homes) {
+        ctx.save();
+        ctx.translate(t.x, t.y);
+        drawOutlinedText(ctx, "H", 0, 0);
+        ctx.restore();
+    }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.lineWidth = 10;
     ctx.font = "48px TexGyreAdventor";

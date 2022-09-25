@@ -79,6 +79,9 @@ export type GameState = {
     towerProjectiles: Projectile[],
     enemyProjectiles: Projectile[]
     money: number,
+    totalMoney: number,
+    towerCost: number,
+    homeCost: number,
     screen: Screen,
     homes: Home[],
     resources: Resource[]

@@ -19,9 +19,18 @@ let game: GameState = {
     enemies: [],
     towerProjectiles: [],
     enemyProjectiles: [],
-    resources: [],
-    money: 0,
-    screen: Screen.TITLE,
+    resources: new Array(100).fill(0).map(() => {
+        return {
+            x: Math.random() * 10000 - 5000,
+            y: Math.random() * 10000 - 5000,
+            amount: Math.random() * 100 + 100
+        }
+    }),
+    money: 60,
+    totalMoney: 60,
+    towerCost: 15,
+    homeCost: 30,
+    screen: Screen.GAME,
     homes: [
         { x: 0, y: 0, hp: 1000, maxHP: 1000 },
         { x: 550, y: 550, hp: 1000, maxHP: 1000 }
@@ -29,9 +38,9 @@ let game: GameState = {
 }
 
 game.towers.push(
-    createDefaultTower(40, 50, ["A"]),
-    createDefaultTower(400, 50, ["B"]),
-    createDefaultTower(40, 500, ["C"]),
+    // createDefaultTower(40, 50, ["A"]),
+    // createDefaultTower(400, 50, ["B"]),
+    // createDefaultTower(40, 500, ["C"]),
 )
 
 function arrayEq<T>(a: T[], b: T[]) {
@@ -67,10 +76,12 @@ async function gameLoop() {
         }
         if (rightMouseDown && getAllKeysDown().length != 0 && !isRepeatKeybind(getAllKeysDown())
         && getAllKeysDown().reduce((prev, curr) => prev && (curr.match(/^[0-9A-Z]$/g) !== null), true)
+        && game.money >= game.towerCost
         ) {
             setRightMouseDown(false);
             const mousepos = getMousePos();
             game.towers.push(createDefaultTower(mousepos.x, mousepos.y, getAllKeysDown()));
+            game.money -= game.towerCost;
         }
         updateTowers(game);
         updateEnemies(game);
