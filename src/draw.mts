@@ -70,10 +70,11 @@ export async function drawGame(ctx: CanvasRenderingContext2D, game: GameState){
     ctx.scale(sf, sf);
     ctx.translate(-viewTopLeft.x, -viewTopLeft.y);
     ctx.font = "48px TexGyreAdventor";
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "green";
     game.towerProjectiles.forEach(t => {
-        ctx.fillRect(t.x - 4, t.y - 4, 8, 8);
+        ctx.fillRect(t.x - 8, t.y - 8, 16, 16);
     });
+    ctx.fillStyle = "red";
     game.enemyProjectiles.forEach(t => {
         ctx.fillRect(t.x - 4, t.y - 4, 8, 8);
     });
@@ -133,6 +134,10 @@ export async function drawGame(ctx: CanvasRenderingContext2D, game: GameState){
         ctx.beginPath();
         ctx.arc(t.x, t.y, 45, 0, Math.PI * 2 * (t.hp / t.maxHP));
         ctx.stroke();
+    }
+    for (let p of game.particles) {
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x - 3, p.y - 3, 6, 6);
     }
     ctx.textAlign = "center";
     for (let n of game.notes) {

@@ -58,7 +58,19 @@ export function updateTowers(game: GameState) {
         }
         if (keycomboindex(tower.fireKeys, tower.fireKeyIndices)) {
             const projectile = tower.onFire(tower);
-            if (projectile) game.towerProjectiles.push(projectile);
+            if (projectile) {
+                game.towerProjectiles.push(projectile);
+                for (let i= 0 ; i < 35; i++) {
+                    let angle = getAngleToMouse(tower.x, tower.y) + Math.random() - 0.5;
+                    game.particles.push({
+                        x: tower.x, y: tower.y,
+                        dx: Math.cos(angle) * Math.random() * 24,
+                        dy: Math.sin(angle) * Math.random() * 24,
+                        lifetimeRemaining: Math.random() * 30,
+                        color: `rgb(${Math.random() * 150}, ${Math.random() * 50 + 200}, ${Math.random() * 150})`
+                    });
+                }
+            }
         }
     });
 }

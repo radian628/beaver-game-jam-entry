@@ -89,12 +89,22 @@ type Note = {
     radius: number
 });
 
+type Particle = {
+    x: number,
+    y: number,
+    dx: number,
+    dy: number,
+    lifetimeRemaining: number,
+    color: string
+}
+
 // single monolithic object containing the entire state of the game
 export type GameState = {
     towers: Tower[],
     enemies: Enemy[],
     towerProjectiles: Projectile[],
     enemyProjectiles: Projectile[],
+    particles: Particle[],
     notes: Note[],
     money: number,
     totalMoney: number,
@@ -105,4 +115,5 @@ export type GameState = {
     resources: Resource[],
     timer: number,
     homeRadius: number,
+    homeProximityRequirement: number
 }

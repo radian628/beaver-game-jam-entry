@@ -36,7 +36,7 @@ export function createDefaultEnemy(x: number, y: number): Enemy {
                     proj.y += dy;
                 },
                 onHitTarget: (target, proj) => {
-                    target.hp -= 15;
+                    target.hp -= 35;
                     proj.lifetimeRemaining = 0;
                 },
                 radius: 10,
@@ -49,7 +49,7 @@ export function createDefaultEnemy(x: number, y: number): Enemy {
             let angle = Math.atan2(enemy.y - home.y, enemy.x - home.x);
 
             let mag = distance(home, enemy);
-            const vel = mag > 1000 ? 3 : 0.2;
+            const vel = mag > 1000 ? 10 : 0.6;
             const dx = Math.cos(angle) * -vel;
             const dy = Math.sin(angle) * -vel;
             enemy.x += dx;
