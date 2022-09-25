@@ -14,9 +14,6 @@ window.addEventListener("resize", onResize);
 window.dispatchEvent(new Event("resize"));
 const ctx = canvas.getContext("2d");
 
-
-console.log("got here!");   
-
 let game: GameState = {
     towers: [],
     enemies: [],
@@ -57,15 +54,13 @@ async function gameLoop() {
     }
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "black";
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.font = "48px TexGyreAdventor";
 
     const sf = window.innerHeight / (viewBottom - viewTopLeft.y);
     ctx.scale(sf, sf);
     ctx.translate(-viewTopLeft.x, -viewTopLeft.y);
-    
+
     ctx.fillStyle = "red";
     game.towerProjectiles.forEach(t => {
         ctx.fillRect(t.x - 2, t.y - 2, 4, 4);
