@@ -212,7 +212,7 @@ async function gameLoop() {
         if (game.timer % 600 == 0) {
             let angle = Math.random() * Math.PI * 2;
             let mag = Math.random() * 3000 + 8000;
-            for (let i = 0; i < game.timer / 1000; i++) {
+            for (let i = 0; i < game.timer / 1500; i++) {
                 game.enemies.push(
                     createDefaultEnemy(
                         Math.cos(angle) * mag + Math.random() * 6000 - 3000, 
