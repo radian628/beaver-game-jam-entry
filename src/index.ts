@@ -57,8 +57,11 @@ function isRepeatKeybind(keys: string[]) {
 
 async function gameLoop() {
     const scalefactor = window.innerHeight/(viewBottom - viewTopLeft.y);
-    canvas.style.backgroundPosition = "" + (-viewTopLeft.x * scalefactor) + "px " + (-viewTopLeft.y * scalefactor) + "px";
-    canvas.style.backgroundSize = (600000/(viewBottom - viewTopLeft.y)) +"px";
+    const bg = document.getElementById("bg");
+    if (bg) {
+        bg.style.backgroundPosition = "" + (-viewTopLeft.x * scalefactor) + "px " + (-viewTopLeft.y * scalefactor) + "px";
+        bg.style.backgroundSize = (600000/(viewBottom - viewTopLeft.y)) +"px";
+    }
     if (Math.random() > 0.99) {
         game.enemies.push(
             createDefaultEnemy(Math.random() * 3000 - 1500, Math.random() * 3000 - 1500),
