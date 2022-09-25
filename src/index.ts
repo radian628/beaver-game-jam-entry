@@ -56,24 +56,7 @@ function isRepeatKeybind(keys: string[]) {
 }
 
 async function gameLoop() {
-    const scalefactor = window.innerHeight/(viewBottom - viewTopLeft.y);
-    canvas.style.backgroundPosition = "" + (-viewTopLeft.x * scalefactor) + "px " + (-viewTopLeft.y * scalefactor) + "px";
-    canvas.style.backgroundSize = (600000/(viewBottom - viewTopLeft.y)) +"px";
-    if (Math.random() > 0.99) {
-        game.enemies.push(
-            createDefaultEnemy(Math.random() * 3000 - 1500, Math.random() * 3000 - 1500),
-        )
-    }
-
-    if (rightMouseDown && getAllKeysDown().length != 0 && !isRepeatKeybind(getAllKeysDown())
-        && getAllKeysDown().reduce((prev, curr) => prev && (curr.match(/^[0-9A-Z]$/g) !== null), true)
-    ) {
-        setRightMouseDown(false);
-        const mousepos = getMousePos();
-        game.towers.push(createDefaultTower(mousepos.x, mousepos.y, getAllKeysDown()));
-    }
-
-
+    
     if (!ctx) {
         window.alert("Failed to create canvas context.");
         throw new Error("stupid canvas isnt working");
