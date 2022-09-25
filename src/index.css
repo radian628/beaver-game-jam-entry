@@ -14,7 +14,7 @@ canvas{
     margin: 0;
     padding: 0;
     border: none;
-    background-image: image('assets/floor.png');
+    background-image: url('assets/floor.png');
     background-repeat: repeat;
     background-size: 50%;
 }
