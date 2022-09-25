@@ -63,9 +63,9 @@ async function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (game.screen == Screen.TITLE) {
-        drawTitle(ctx);
+        drawTitle(ctx, game);
     } else if (game.screen == Screen.GAME) {
-        drawGame(ctx);
+        drawGame(ctx, game);
         if (Math.random() > 0.99) {
             game.enemies.push(
                 createDefaultEnemy(Math.random() * 3000 - 1500, Math.random() * 3000 - 1500),

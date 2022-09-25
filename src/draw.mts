@@ -13,16 +13,17 @@ export async function getimg(url: string): Promise<HTMLImageElement> {
         newimg.src = url;
     });
 }
-export function drawTitle(ctx){
+export function drawTitle(ctx, game){
     ctx.fillStyle = "#00000022";
     ctx.fillRect(0,0,canvas.width, canvas.height);
-    ctx.fillStyle = "#ffffffaa"
+    ctx.fillStyle = "#ffffff99"
     ctx.beginPath();
     ctx.arc(canvas.width/2, canvas.height/2,Math.min(canvas.height, canvas.width)/2, 0, 2*Math.PI);
     ctx.fill();
     ctx.endPath();
+
 }
-export function drawGame(ctx){
+export function drawGame(ctx, game){
     const sf = window.innerHeight/(viewBottom - viewTopLeft.y);
     const bg = document.getElementById("bg");
     if (bg) {
