@@ -1,5 +1,5 @@
 import { getAllKeysDown, getMousePos, keycombo, rightMouseDown, setRightMouseDown, viewBottom, viewTopLeft } from "./controls.mjs";
-import { getimg } from "./draw.mjs";
+import { getimg, drawTitle } from "./draw.mjs";
 import { createDefaultEnemy, updateEnemies } from "./enemy_logic.mjs";
 import { enemyTextures, GameState, Screen, towerTextures } from "./game_state.mjs";
 import { updateProjectiles } from "./projectile_logic.mjs";
@@ -64,13 +64,7 @@ async function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (game.screen == Screen.TITLE) {
-        ctx.fillStyle = "#00000022";
-        ctx.fillRect(0,0,canvas.width, canvas.height);
-        ctx.fillStyle = "#ffffffaa"
-        ctx.beginPath();
-        ctx.arc(canvas.width/2, canvas.height/2,Math.min(canvas.height, canvas.width)/2, 0, 2*Math.PI);
-        ctx.fill();
-        ctx.endPath();
+        drawTitle(ctx);
     } else if (game.screen == Screen.GAME) {
 
         const scalefactor = window.innerHeight/(viewBottom - viewTopLeft.y);
