@@ -133,7 +133,7 @@ export async function drawGame(ctx: CanvasRenderingContext2D, game: GameState){
     for (let t of game.homes) {
         ctx.save();
         ctx.translate(t.x, t.y);
-        drawOutlinedText(ctx, "H", 0, 0);
+        ctx.drawImage(await getimg("./src/assets/housespic.png"), -25, -25, 50, 50);
         ctx.restore();
 
         ctx.lineWidth = 5;
