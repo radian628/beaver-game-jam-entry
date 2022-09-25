@@ -43,7 +43,8 @@ let game: GameState = {
     ],
     timer: 0,
     homeRadius: 250,
-    homeProximityRequirement: 1000
+    homeProximityRequirement: 1000,
+    homeMinimumProximityRequirement: 500
 }
 
 game.towers.push(
@@ -67,11 +68,17 @@ function isRepeatKeybind(keys: string[]) {
     return false;
 }
 
+let towerHomeUIRoot: HTMLDivElement | undefined = undefined;
+
 function createTowerHomeUI(x: number, y: number) {
+    if (towerHomeUIRoot && towerHomeUIRoot.parentElement) {
+        towerHomeUIRoot.parentElement.removeChild(towerHomeUIRoot);
+    }
+    placePosition.enabled = true;
     const pastMousePos = getMousePos();
     const root = document.createElement("div");
+    towerHomeUIRoot = root;
     root.style.borderRadius = "50%";
-    root.style.background = "#00000088";
     root.style.position = "absolute";
     root.style.top = (y-50) + "px";
     root.style.left = (x-50) + "px";
@@ -88,13 +95,15 @@ function createTowerHomeUI(x: number, y: number) {
 
     root.onblur = function () {
         document.body.removeChild(root);
+        placePosition.enabled = false;
     }
     root.onmouseleave = function () {
         document.body.removeChild(root);
+        placePosition.enabled = false;
     }
 
     const homebtn = document.createElement("button");
-    homebtn.innerText = "Home $30"
+    homebtn.innerText = "Home $30";
     root.appendChild(homebtn);
     homebtn.style.height="20px";
     homebtn.onclick = function () {
@@ -130,6 +139,18 @@ function createTowerHomeUI(x: number, y: number) {
                 lifetimeRemaining: 120, type: NoteType.TEXT
             });
             return;
+        }
+
+        for (let h of game.homes) {
+            if (distance(pastMousePos, h) < game.homeMinimumProximityRequirement) {
+                game.notes.push({
+                    x: pastMousePos.x,
+                    y: pastMousePos.y,
+                    text: "Home is too close to other homes.",
+                    lifetimeRemaining: 120, type: NoteType.TEXT
+                });
+                return;
+            }
         }
 
         if (game.money >= game.homeCost) {
@@ -192,6 +213,8 @@ function createTowerHomeUI(x: number, y: number) {
 
     document.body.appendChild(root);
 }
+
+export let placePosition = { x: 0, y: 0, enabled: false };
 
 async function gameLoop() {
     if (!ctx) {
@@ -264,6 +287,8 @@ async function gameLoop() {
         }
         if (rightMouseDown
         ) {
+            placePosition.x = getMousePos().x;
+            placePosition.y = getMousePos().y;
             createTowerHomeUI(mousePosScreen.x, mousePosScreen.y);
         }
         updateTowers(game);
