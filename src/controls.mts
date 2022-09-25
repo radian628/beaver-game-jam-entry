@@ -3,7 +3,9 @@ const keysDownIndex = new Map<string, number>();
 let mousePos = { x: 0, y: 0 }
 let mousePosScreen = { x: 0, y: 0 }
 
-let mouseDown = false;
+export let mouseDown = false;
+export let rightMouseDown = false; 
+export let setRightMouseDown = (v: boolean) => rightMouseDown = v;
 
 export let viewTopLeft = { x: 0, y: 0 }
 export let viewBottom = 600;
@@ -21,11 +23,18 @@ window.addEventListener("keyup", e => {
 });
 
 document.addEventListener("mousedown", e => {
-    mouseDown = true;
+    if (e.button == 0) mouseDown = true;
+    if (e.button == 2) rightMouseDown = true; 
 });
 
 document.addEventListener("mouseup", e => {
-    mouseDown = false;
+    if (e.button == 0) mouseDown = false;
+    if (e.button == 2) rightMouseDown = false;
+});
+
+document.addEventListener("contextmenu", e => {
+    e.preventDefault();
+    return false;
 });
 
 window.addEventListener("mousemove", e => {
