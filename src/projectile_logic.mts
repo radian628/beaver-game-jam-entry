@@ -34,4 +34,5 @@ export function updateProjectiles(game: GameState) {
 
     game.towers = game.towers.filter(t => t.hp > 0);
     game.enemies = game.enemies.filter(t => t.hp > 0);
+    game.homes = game.homes.filter(t => t.hp > 0);
 }

@@ -1,7 +1,7 @@
 const keysDown = new Map<string, boolean>();
 const keysDownIndex = new Map<string, number>();
 let mousePos = { x: 300, y: 300 }
-let mousePosScreen = { x: 0, y: 0 }
+export let mousePosScreen = { x: 0, y: 0 }
 
 export let mouseDown = false;
 export let rightMouseDown = false; 

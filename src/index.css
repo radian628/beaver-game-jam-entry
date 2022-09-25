@@ -27,3 +27,15 @@ canvas{
     background-size: 50%;
     filter: brightness(0.35);
 }
+
+.tower-home-ui button {
+    background: black;
+    border: 1px solid #ffffff88;
+    color: white;
+    border-radius: 5px;
+    transition: background-color 0.15s;
+}
+.tower-home-ui button:hover {
+    background: #555555;
+    cursor: pointer;
+}
