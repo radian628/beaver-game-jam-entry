@@ -54,7 +54,7 @@ function isRepeatKeybind(keys: string[]) {
 
 async function gameLoop() {
 
-    canvas.style.backgroundPosition = "left " + viewTopLeft.x + "px top " + viewTopLeft.y + "px";
+    canvas.style.backgroundPosition = "right " + viewTopLeft.x + "px bottom " + viewTopLeft.y + "px";
     if (Math.random() > 0.98) {
         game.enemies.push(
             createDefaultEnemy(Math.random() * 3000 - 1500, Math.random() * 3000 - 1500),
