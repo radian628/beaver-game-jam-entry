@@ -61,7 +61,9 @@ async function gameLoop() {
         )
     }
 
-    if (rightMouseDown && getAllKeysDown().length != 0 && !isRepeatKeybind(getAllKeysDown())) {
+    if (rightMouseDown && getAllKeysDown().length != 0 && !isRepeatKeybind(getAllKeysDown())
+        && getAllKeysDown().reduce((prev, curr) => prev && (curr.match(/^[0-9A-Z]$/g) !== null), true)
+    ) {
         setRightMouseDown(false);
         const mousepos = getMousePos();
         game.towers.push(createDefaultTower(mousepos.x, mousepos.y, getAllKeysDown()));
