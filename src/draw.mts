@@ -36,18 +36,19 @@ export async function drawTitle(ctx: CanvasRenderingContext2D, game: GameState){
     ctx.stroke();
     ctx.closePath();
     ctx.beginPath();
+    ctx.moveTo(canvas.width/2, canvas.height/2);
     if((mousePosScreen.x-canvas.width/2) ** 2 + (mousePosScreen.y-canvas.height/2) ** 2 < (Math.min(canvas.width, canvas.height)/2)**2 && mousePosScreen.y > canvas.height/2){
         if(mousePosScreen.x > canvas.width/2){
             ctx.arc(canvas.width/2, canvas.height/2, Math.min(canvas.height, canvas.width)/2, 0, 0.5*Math.PI);
-            ctx.fillStyle = "00FF00AA";
+            ctx.fillStyle = "#00FF00AA";
         }
         else{
             ctx.arc(canvas.width/2, canvas.height/2, Math.min(canvas.height, canvas.width)/2, 0.5*Math.PI, Math.PI);
-            ctx.fillStyle = "FF0000AA";
+            ctx.fillStyle = "#FF0000AA";
         }
     }
-    ctx.fill();
     ctx.closePath();
+    ctx.fill();
     ctx.textAlign = "center";
     ctx.font = "64px TexGyreAdventor";
     drawOutlinedText(ctx, "Control Freak", canvas.width/2, canvas.height/4);

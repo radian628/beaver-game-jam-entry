@@ -120,7 +120,7 @@ function createTowerHomeUI(x: number, y: number) {
             if (distance(pastMousePos, h) < game.homeProximityRequirement) {
                 isoutofrange = false;
             }
-        }); 
+        });
 
         if (isoutofrange) {
             game.notes.push({
@@ -213,6 +213,33 @@ async function gameLoop() {
                     window.open('https://radian628.github.io/important');
                 }
                 else{
+                    game = {
+                        towers: [],
+                        enemies: [],
+                        particles: [],
+                        towerProjectiles: [],
+                        enemyProjectiles: [],
+                        notes: [],
+                        resources: [...new Array(300).fill(0).map(() => {
+                            const amount = 30
+                            return {
+                                x: Math.random() * 15000 - 7500,
+                                y: Math.random() * 15000 - 7500,
+                                amount, totalAmount: amount
+                            }
+                        }), { x: 30, y: 30, amount: 30, totalAmount: 30 }],
+                        money: 60,
+                        totalMoney: 60,
+                        towerCost: 15,
+                        homeCost: 30,
+                        screen: Screen.TITLE,
+                        homes: [
+                            { x: 0, y: 0, hp: 1000, maxHP: 1000 },
+                        ],
+                        timer: 0,
+                        homeRadius: 250,
+                        homeProximityRequirement: 1000
+                    };
                     game.screen = Screen.GAME;
                 }
             }
@@ -220,6 +247,7 @@ async function gameLoop() {
     } else if (game.screen == Screen.GAME) {
         if (game.homes.length == 0) {
             game.screen = Screen.DEAD;
+
         }
         drawGame(ctx, game);
         if (game.timer % 600 == 0) {
