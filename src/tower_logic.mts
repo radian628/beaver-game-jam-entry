@@ -8,26 +8,24 @@ export function getAngleToMouse(xp: number, yp: number) {
 
 export function createDefaultTower(x: number, y: number, fireKeys: string[]): Tower {
 
-    let fireCooldown = 30;
-
-    let fireTimeRemaining = 30;
-
     return {
         x, y,
         hp: 100,
         maxHP: 100,
         ammo: 10,
         maxAmmo: 10,
+        fireTimeRemaining: 0,
+        fireTimeCooldown: 80,
         fireKeyIndices: fireKeys.map(e => -1),
         fireKeys,
         type: TowerType.DEFAULT,
         onFire: (tower: Tower) => {
             let angle = getAngleToMouse(tower.x, tower.y);
-            if (fireTimeRemaining > 0) {
+            if (tower.fireTimeRemaining > 0) {
                 return;
             } 
 
-            fireTimeRemaining = fireCooldown;
+            tower.fireTimeRemaining = tower.fireTimeCooldown;
 
             const dx = Math.cos(angle) * 10;
             const dy = Math.sin(angle) * 10;
@@ -47,7 +45,7 @@ export function createDefaultTower(x: number, y: number, fireKeys: string[]): To
             }
         },
         onUpdate: (tower: Tower) => {
-            fireTimeRemaining--;
+            tower.fireTimeRemaining--;
         }
     }
 } 

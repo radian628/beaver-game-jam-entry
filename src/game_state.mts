@@ -20,6 +20,8 @@ export const towerTextures: Record<TowerType, { base: string, cannon: string }> 
 }
 // player-controlled towers
 export type Tower = {
+    fireTimeRemaining: number,
+    fireTimeCooldown: number,
     x: number,
     y: number,
     hp: number,
@@ -31,6 +33,14 @@ export type Tower = {
     type: TowerType,
     onFire: (tower: Tower) => Projectile | undefined,
     onUpdate: (tower: Tower) => void
+}
+
+// "homes" that enemies will try to destroy
+export type Home = {
+    x: number,
+    y: number,
+    hp: number, 
+    maxHP: number
 }
 
 export enum EnemyType {
@@ -48,8 +58,8 @@ export type Enemy = {
     maxHP: number,
     type: EnemyType,
     radius: number,
-    onFire: (enemy: Enemy, game: GameState) => Projectile | undefined,
-    onUpdate: (enemy: Enemy, game: GameState) => void
+    onFire: (enemy: Enemy, home?: Home) => Projectile | undefined,
+    onUpdate: (enemy: Enemy, home?: Home) => void
 }
 
 export enum Screen {
@@ -64,10 +74,5 @@ export type GameState = {
     enemyProjectiles: Projectile[]
     money: number,
     screen: Screen,
-    home: {
-        x: number,
-        y: number,
-        hp: number,
-        maxHP: number
-    }
+    homes: Home[]
 }

@@ -21,7 +21,10 @@ let game: GameState = {
     enemyProjectiles: [],
     money: 0,
     screen: Screen.GAME,
-    home: { x: 0, y: 0, hp: 1000, maxHP: 1000 }
+    homes: [
+        { x: 0, y: 0, hp: 1000, maxHP: 1000 },
+        { x: 550, y: 550, hp: 1000, maxHP: 1000 }
+    ]
 }
 
 game.towers.push(
@@ -92,6 +95,13 @@ async function gameLoop() {
         ctx.fillRect(t.x - 4, t.y - 4, 8, 8);
     });
     for (let t of game.towers) {
+        //ctx.filter = `hue-rotate(${t.type * 75}deg)`;
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = "white";
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, 75, 0, Math.PI * 2 * (1 - t.fireTimeRemaining / t.fireTimeCooldown));
+        ctx.stroke();
+
         ctx.save();
         ctx.drawImage(await getimg(towerTextures[t.type].base), t.x - 25, t.y - 25, 50, 50);
         ctx.translate(t.x, t.y);
