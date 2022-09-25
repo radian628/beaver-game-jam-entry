@@ -53,14 +53,16 @@ function isRepeatKeybind(keys: string[]) {
 }
 
 async function gameLoop() {
-
+    canvas.style.backgroundPosition = "left";
     if (Math.random() > 0.98) {
         game.enemies.push(
             createDefaultEnemy(Math.random() * 3000 - 1500, Math.random() * 3000 - 1500),
         )
     }
 
-    if (rightMouseDown && getAllKeysDown().length != 0 && !isRepeatKeybind(getAllKeysDown())) {
+    if (rightMouseDown && getAllKeysDown().length != 0 && !isRepeatKeybind(getAllKeysDown())
+        && getAllKeysDown().reduce((prev, curr) => prev && (curr.match(/^[0-9A-Z]$/g) !== null), true)
+    ) {
         setRightMouseDown(false);
         const mousepos = getMousePos();
         game.towers.push(createDefaultTower(mousepos.x, mousepos.y, getAllKeysDown()));

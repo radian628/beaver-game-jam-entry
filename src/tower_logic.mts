@@ -39,7 +39,7 @@ export function createDefaultTower(x: number, y: number, fireKeys: string[]): To
                     proj.y += dy;
                 },
                 onHitTarget: (target, proj) => {
-                    target.hp -= 35;
+                    target.hp -= 135;
                     proj.lifetimeRemaining = 0;
                 },
                 radius: 10,
