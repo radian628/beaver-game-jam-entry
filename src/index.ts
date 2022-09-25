@@ -58,47 +58,52 @@ function isRepeatKeybind(keys: string[]) {
 async function gameLoop() {
 
     if (!ctx) {
-        window.alert("Failed to create canvas context.");
-        throw new Error("stupid canvas isnt working");
+        window.alert("canvas error that should nver happen");
+        throw "";
     }
 
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    if(game.screen == Screen.TITLE){
-        
-    }
-    else if(game.screen == Screen.GAME){
-        canvas.style.backgroundSize = (600*50/(viewBottom - viewTopLeft.y))/ +"%";
-        canvas.style.backgroundPosition = "left " + (-viewTopLeft.x) + "px top " + (-viewTopLeft.y) + "px";
+
+    if (game.screen == Screen.TITLE) {
+
+    } else if (game.screen == Screen.GAME) {
+
+        const scalefactor = window.innerHeight/(viewBottom - viewTopLeft.y);
+        const bg = document.getElementById("bg");
+        if (bg) {
+            bg.style.backgroundPosition = "" + (-viewTopLeft.x * scalefactor) + "px " + (-viewTopLeft.y * scalefactor) + "px";
+            bg.style.backgroundSize = (600000/(viewBottom - viewTopLeft.y)) +"px";
+        }
         if (Math.random() > 0.99) {
             game.enemies.push(
                 createDefaultEnemy(Math.random() * 3000 - 1500, Math.random() * 3000 - 1500),
             )
         }
 
-        if (rightMouseDown && getAllKeysDown().length != 0 && !isRepeatKeybind(getAllKeysDown())
-            && getAllKeysDown().reduce((prev, curr) => prev && (curr.match(/^[0-9A-Z]$/g) !== null), true)
-        ) {
-            setRightMouseDown(false);
-            const mousepos = getMousePos();
-            game.towers.push(createDefaultTower(mousepos.x, mousepos.y, getAllKeysDown()));
-        }
+            if (rightMouseDown && getAllKeysDown().length != 0 && !isRepeatKeybind(getAllKeysDown())
+                && getAllKeysDown().reduce((prev, curr) => prev && (curr.match(/^[0-9A-Z]$/g) !== null), true)
+            ) {
+                setRightMouseDown(false);
+                const mousepos = getMousePos();
+                game.towers.push(createDefaultTower(mousepos.x, mousepos.y, getAllKeysDown()));
+            }
 
-        const sf = window.innerHeight / (viewBottom - viewTopLeft.y);
-        ctx.scale(sf, sf);
-        ctx.translate(-viewTopLeft.x, -viewTopLeft.y);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        ctx.font = "48px TexGyreAdventor";
+            const sf = window.innerHeight / (viewBottom - viewTopLeft.y);
+            ctx.scale(sf, sf);
+            ctx.translate(-viewTopLeft.x, -viewTopLeft.y);
 
-        ctx.fillStyle = "red";
-        game.towerProjectiles.forEach(t => {
-            ctx.fillRect(t.x - 4, t.y - 4, 8, 8);
-        });
-        game.enemyProjectiles.forEach(t => {
-            ctx.fillRect(t.x - 4, t.y - 4, 8, 8);
-        });
-        for (let t of game.towers) {
-            //ctx.filter = `hue-rotate(${t.type * 75}deg)`;
+            ctx.font = "48px TexGyreAdventor";
+
+            ctx.fillStyle = "red";
+            game.towerProjectiles.forEach(t => {
+                ctx.fillRect(t.x - 4, t.y - 4, 8, 8);
+            });
+            game.enemyProjectiles.forEach(t => {
+                ctx.fillRect(t.x - 4, t.y - 4, 8, 8);
+            });
+            for (let t of game.towers) {
+                //ctx.filter = `hue-rotate(${t.type * 75}deg)`;
             ctx.save();
             ctx.drawImage(await getimg(towerTextures[t.type].base), t.x - 25, t.y - 25, 50, 50);
             ctx.translate(t.x, t.y);
