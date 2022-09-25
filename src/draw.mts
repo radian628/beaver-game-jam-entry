@@ -1,4 +1,4 @@
-import { getAllKeysDown, getMousePos, keycombo, rightMouseDown, setRightMouseDown, viewBottom, viewTopLeft } from "./controls.mjs";
+import { getAllKeysDown, getMousePos, keycombo, rightMouseDown, setRightMouseDown, viewBottom, viewTopLeft, mousePosScreen } from "./controls.mjs";
 import { enemyTextures, towerTextures, GameState, NoteType } from "./game_state.mjs";
 import { getAngleToMouse } from "./tower_logic.mjs";
 const imageCache = new Map<string, HTMLImageElement>();
@@ -36,12 +36,17 @@ export async function drawTitle(ctx: CanvasRenderingContext2D, game: GameState){
     ctx.stroke();
     ctx.closePath();
     ctx.beginPath();
-    if(getMousePos().x)
-        ctx.arc(canvas.width/2, canvas.height/2, Math.min(canvas.height, canvas.width)/2, 0, 0.5*Math.PI);
-        ctx.fillStyle = "00FF00AA";
-    //if mouse bad
-        ctx.arc(canvas.width/2, canvas.height/2, Math.min(canvas.height, canvas.width)/2, 0.5*Math.PI, Math.PI);
-        ctx.fillStyle = "FF0000AA";
+    if((mousePosScreen.x-canvas.width/2) ** 2 + (mousePosScreen.y-canvas.height/2) ** 2 < (Math.min(canvas.width, canvas.height)/2)**2 && mousePosScreen.y > canvas.height/2){
+        if(mousePosScreen.x > canvas.width/2){
+            ctx.arc(canvas.width/2, canvas.height/2, Math.min(canvas.height, canvas.width)/2, 0, 0.5*Math.PI);
+            ctx.fillStyle = "00FF00AA";
+        }
+        else{
+            ctx.arc(canvas.width/2, canvas.height/2, Math.min(canvas.height, canvas.width)/2, 0.5*Math.PI, Math.PI);
+            ctx.fillStyle = "FF0000AA";
+        }
+    }
+    ctx.fill();
     ctx.closePath();
     ctx.textAlign = "center";
     ctx.font = "64px TexGyreAdventor";
@@ -162,4 +167,5 @@ export function drawDeadScreen(ctx: CanvasRenderingContext2D, game: GameState) {
     ctx.font = "48px TexGyreAdventor";
     drawOutlinedText(ctx, "Game Over!", window.innerWidth / 2, window.innerHeight / 2);
     drawOutlinedText(ctx, `Final Score: ${game.totalMoney}`, window.innerWidth / 2, window.innerHeight / 2 + 50);
+    drawOutlinedText(ctx, "Press any button to continue!", window.innerWidth/2, window.innerHeight*3/4)
 }

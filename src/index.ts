@@ -1,4 +1,4 @@
-import { getAllKeysDown, getMousePos, keycombo, mousePosScreen, rightMouseDown, setRightMouseDown, viewBottom, viewTopLeft } from "./controls.mjs";
+import { getAllKeysDown, getMousePos, keycombo, mousePosScreen, mouseDown, rightMouseDown, setRightMouseDown, viewBottom, viewTopLeft } from "./controls.mjs";
 import { getimg, drawTitle, drawGame, drawDeadScreen } from "./draw.mjs";
 import { createDefaultEnemy, updateEnemies } from "./enemy_logic.mjs";
 import { enemyTextures, GameState, NoteType, Screen, towerTextures } from "./game_state.mjs";
@@ -35,7 +35,7 @@ let game: GameState = {
     totalMoney: 60,
     towerCost: 15,
     homeCost: 30,
-    screen: Screen.GAME,
+    screen: Screen.TITLE,
     homes: [
         { x: 0, y: 0, hp: 1000, maxHP: 1000 },
     ],
@@ -80,7 +80,7 @@ function createTowerHomeUI(x: number, y: number) {
     root.style.justifyContent = "space-evenly";
     root.style.flexDirection = "column";
     root.className = "tower-home-ui"
-    
+
     root.focus();
 
     root.onblur = function () {
@@ -100,7 +100,7 @@ function createTowerHomeUI(x: number, y: number) {
             if (distance(pastMousePos, resource) < game.homeRadius) {
                 isoutofrange = false;
             }
-        }); 
+        });
 
         if (isoutofrange) {
             game.notes.push({
@@ -158,7 +158,7 @@ function createTowerHomeUI(x: number, y: number) {
         if (!getAllKeysDown().reduce((prev, curr) => prev && (curr.match(/^[0-9A-Z]$/g) !== null), true)) {
             addNote("All keys must be alphanumeric.");
             return;
-        }   
+        }
 
         if (game.money < game.towerCost) {
             addNote("Insufficient funds.");
@@ -180,10 +180,23 @@ async function gameLoop() {
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (game.screen == Screen.DEAD) {
+    if (game.screen == Screen.DEAD){
         drawDeadScreen(ctx, game);
+        if(getAllKeysDown().length >0)
+            game.screen = Screen.TITLE;
     } else if (game.screen == Screen.TITLE) {
         drawTitle(ctx, game);
+        if(mouseDown){
+            console.log(getMousePos());
+            if((mousePosScreen.x-canvas.width/2) ** 2 + (mousePosScreen.y-canvas.height/2) ** 2 < (Math.min(canvas.width, canvas.height)/2)**2 && mousePosScreen.y > canvas.height/2){
+                if(mousePosScreen.x < canvas.width/2){
+                    window.open('https://radian628.github.io/important');
+                }
+                else{
+                    game.screen = Screen.GAME;
+                }
+            }
+        }
     } else if (game.screen == Screen.GAME) {
         if (game.homes.length == 0) {
             game.screen = Screen.DEAD;
@@ -195,7 +208,7 @@ async function gameLoop() {
             for (let i = 0; i < game.timer / 400; i++) {
                 game.enemies.push(
                     createDefaultEnemy(
-                        Math.cos(angle) * mag + Math.random() * 6000 - 3000, 
+                        Math.cos(angle) * mag + Math.random() * 6000 - 3000,
                         Math.sin(angle) * mag + Math.random() * 6000 - 3000
                     ),
                 )
