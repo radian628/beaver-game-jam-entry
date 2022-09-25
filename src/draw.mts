@@ -1,4 +1,16 @@
+import { getAllKeysDown, getMousePos, keycombo, rightMouseDown, setRightMouseDown, viewBottom, viewTopLeft } from "./controls.mjs";
+import { enemyTextures, towerTextures, GameState } from "./game_state.mjs";
+import { getAngleToMouse } from "./tower_logic.mjs";
 const imageCache = new Map<string, HTMLImageElement>();
+const canvas: HTMLCanvasElement = document.getElementById("canvas") as HTMLCanvasElement;
+
+function drawOutlinedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
+    ctx.strokeStyle = "black";
+    ctx.fillStyle = "white";
+    ctx.strokeText(text, x, y);
+    ctx.fillText(text, x, y);
+}
+
 export async function getimg(url: string): Promise<HTMLImageElement> {
     let img = imageCache.get(url);
     if (img) {
@@ -13,17 +25,17 @@ export async function getimg(url: string): Promise<HTMLImageElement> {
         newimg.src = url;
     });
 }
-export function drawTitle(ctx, game){
+export async function drawTitle(ctx: CanvasRenderingContext2D, game: GameState){
     ctx.fillStyle = "#00000022";
     ctx.fillRect(0,0,canvas.width, canvas.height);
     ctx.fillStyle = "#ffffff99"
     ctx.beginPath();
     ctx.arc(canvas.width/2, canvas.height/2,Math.min(canvas.height, canvas.width)/2, 0, 2*Math.PI);
     ctx.fill();
-    ctx.endPath();
+    ctx.closePath();
 
 }
-export function drawGame(ctx, game){
+export async function drawGame(ctx: CanvasRenderingContext2D, game: GameState){
     const sf = window.innerHeight/(viewBottom - viewTopLeft.y);
     const bg = document.getElementById("bg");
     if (bg) {

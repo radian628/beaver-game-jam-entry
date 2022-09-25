@@ -33,13 +33,6 @@ game.towers.push(
     createDefaultTower(40, 500, ["C"]),
 )
 
-function drawOutlinedText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number) {
-    ctx.strokeStyle = "black";
-    ctx.fillStyle = "white";
-    ctx.strokeText(text, x, y);
-    ctx.fillText(text, x, y);
-}
-
 function arrayEq<T>(a: T[], b: T[]) {
     if (a.length != b.length) return false;
     for (let i = 0; i < a.length; i++) {
