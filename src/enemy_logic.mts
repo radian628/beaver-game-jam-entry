@@ -5,9 +5,9 @@ import { distance, getClosest } from "./utils.mjs";
 
 export function createDefaultEnemy(x: number, y: number): Enemy {
 
-    let fireCooldown = 3;
+    let fireCooldown = 15;
 
-    let fireTimeRemaining = 3;
+    let fireTimeRemaining = 15;
 
     let fireRange = 150;
 
@@ -47,8 +47,11 @@ export function createDefaultEnemy(x: number, y: number): Enemy {
             fireTimeRemaining--;
             if (!home) return;
             let angle = Math.atan2(enemy.y - home.y, enemy.x - home.x);
-            const dx = Math.cos(angle) * -0.2;
-            const dy = Math.sin(angle) * -0.2;
+
+            let mag = distance(home, enemy);
+            const vel = mag > 1000 ? 3 : 0.2;
+            const dx = Math.cos(angle) * -vel;
+            const dy = Math.sin(angle) * -vel;
             enemy.x += dx;
             enemy.y += dy;
         },

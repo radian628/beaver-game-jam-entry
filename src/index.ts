@@ -1,9 +1,12 @@
 import { getAllKeysDown, getMousePos, keycombo, mousePosScreen, rightMouseDown, setRightMouseDown, viewBottom, viewTopLeft } from "./controls.mjs";
-import { getimg, drawTitle, drawGame } from "./draw.mjs";
+import { getimg, drawTitle, drawGame, drawDeadScreen } from "./draw.mjs";
 import { createDefaultEnemy, updateEnemies } from "./enemy_logic.mjs";
-import { enemyTextures, GameState, Screen, towerTextures } from "./game_state.mjs";
+import { enemyTextures, GameState, NoteType, Screen, towerTextures } from "./game_state.mjs";
+import { updateHomes } from "./home_logic.mjs";
+import { updateNotes } from "./note_logic.mjs";
 import { updateProjectiles } from "./projectile_logic.mjs";
 import { createDefaultTower, getAngleToMouse, updateTowers } from "./tower_logic.mjs";
+import { distance } from "./utils.mjs";
 
 const canvas: HTMLCanvasElement = document.getElementById("canvas") as HTMLCanvasElement;
 function onResize() {
@@ -19,13 +22,15 @@ let game: GameState = {
     enemies: [],
     towerProjectiles: [],
     enemyProjectiles: [],
-    resources: new Array(100).fill(0).map(() => {
+    notes: [],
+    resources: [...new Array(300).fill(0).map(() => {
+        const amount = Math.random() * 25 + 25;
         return {
-            x: Math.random() * 10000 - 5000,
-            y: Math.random() * 10000 - 5000,
-            amount: Math.random() * 100 + 100
+            x: Math.random() * 15000 - 7500,
+            y: Math.random() * 15000 - 7500,
+            amount, totalAmount: amount
         }
-    }),
+    }), { x: 30, y: 30, amount: 30, totalAmount: 30 }],
     money: 60,
     totalMoney: 60,
     towerCost: 15,
@@ -33,8 +38,9 @@ let game: GameState = {
     screen: Screen.GAME,
     homes: [
         { x: 0, y: 0, hp: 1000, maxHP: 1000 },
-        { x: 550, y: 550, hp: 1000, maxHP: 1000 }
-    ]
+    ],
+    timer: 0,
+    homeRadius: 250
 }
 
 game.towers.push(
@@ -59,6 +65,7 @@ function isRepeatKeybind(keys: string[]) {
 }
 
 function createTowerHomeUI(x: number, y: number) {
+    const pastMousePos = getMousePos();
     const root = document.createElement("div");
     root.style.borderRadius = "50%";
     root.style.background = "#00000088";
@@ -70,8 +77,9 @@ function createTowerHomeUI(x: number, y: number) {
     root.style.height = "100px";
     root.style.display = "flex";
     root.style.justifyItems = "center";
-    root.style.justifyContent = "center";
+    root.style.justifyContent = "space-evenly";
     root.style.flexDirection = "column";
+    root.className = "tower-home-ui"
     
     root.focus();
 
@@ -83,37 +91,83 @@ function createTowerHomeUI(x: number, y: number) {
     }
 
     const homebtn = document.createElement("button");
-    homebtn.innerText = "Home"
+    homebtn.innerText = "Home $30"
     root.appendChild(homebtn);
     homebtn.style.height="20px";
     homebtn.onclick = function () {
+        let isoutofrange = true;
+        game.resources.forEach(resource => {
+            if (distance(pastMousePos, resource) < game.homeRadius) {
+                isoutofrange = false;
+            }
+        }); 
+
+        if (isoutofrange) {
+            game.notes.push({
+                x: pastMousePos.x,
+                y: pastMousePos.y,
+                text: "Home is out of range of resources.",
+                lifetimeRemaining: 120, type: NoteType.TEXT
+            });
+            return;
+        }
+
         if (game.money >= game.homeCost) {
-            const mousepos = getMousePos();
             game.homes.push({
-                x: mousepos.x,
-                y: mousepos.y,
+                x: pastMousePos.x,
+                y: pastMousePos.y,
                 hp: 1000,
                 maxHP: 1000
             });
             game.money -= game.homeCost;
+            root.blur();
+        } else {
+            game.notes.push({
+                x: pastMousePos.x,
+                y: pastMousePos.y,
+                text: "Insufficient funds.",
+                lifetimeRemaining: 120, type: NoteType.TEXT
+            });
         }
     }
 
     const towerbtn = document.createElement("button");
-    towerbtn.innerText = "Tower";
+    towerbtn.innerText = "Tower $15";
     root.appendChild(towerbtn);
     towerbtn.style.height="20px";
     towerbtn.onclick = function () {
-        if (
-            getAllKeysDown().length != 0 && !isRepeatKeybind(getAllKeysDown())
-        && getAllKeysDown().reduce((prev, curr) => prev && (curr.match(/^[0-9A-Z]$/g) !== null), true)
-        && game.money >= game.towerCost
-        ) {
-            //setRightMouseDown(false);
-            const mousepos = getMousePos();
-            game.towers.push(createDefaultTower(mousepos.x, mousepos.y, getAllKeysDown()));
-            game.money -= game.towerCost;
+        function addNote(text: string, duration?: number) {
+            game.notes.push({
+                x: pastMousePos.x,
+                y: pastMousePos.y,
+                text,
+                lifetimeRemaining: duration ?? 120, type: NoteType.TEXT
+            });
         }
+
+        if (getAllKeysDown().length == 0) {
+            addNote("You must press one or more keys while placing a tower", 240);
+            return;
+        }
+
+        if (isRepeatKeybind(getAllKeysDown())) {
+            addNote(`A tower already exists with keybind '${getAllKeysDown().join("+")}'`, 240);
+            return;
+        }
+
+        if (!getAllKeysDown().reduce((prev, curr) => prev && (curr.match(/^[0-9A-Z]$/g) !== null), true)) {
+            addNote("All keys must be alphanumeric.");
+            return;
+        }   
+
+        if (game.money < game.towerCost) {
+            addNote("Insufficient funds.");
+            return;
+        }
+            //setRightMouseDown(false);
+        game.towers.push(createDefaultTower(pastMousePos.x, pastMousePos.y, getAllKeysDown()));
+        game.money -= game.towerCost;
+        root.blur();
     }
 
     document.body.appendChild(root);
@@ -126,14 +180,26 @@ async function gameLoop() {
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (game.screen == Screen.TITLE) {
+    if (game.screen == Screen.DEAD) {
+        drawDeadScreen(ctx, game);
+    } else if (game.screen == Screen.TITLE) {
         drawTitle(ctx, game);
     } else if (game.screen == Screen.GAME) {
+        if (game.homes.length == 0) {
+            game.screen = Screen.DEAD;
+        }
         drawGame(ctx, game);
-        if (Math.random() > 0.99) {
-            game.enemies.push(
-                createDefaultEnemy(Math.random() * 3000 - 1500, Math.random() * 3000 - 1500),
-            )
+        if (game.timer % 600 == 0) {
+            let angle = Math.random() * Math.PI * 2;
+            let mag = Math.random() * 3000 + 8000;
+            for (let i = 0; i < game.timer / 400; i++) {
+                game.enemies.push(
+                    createDefaultEnemy(
+                        Math.cos(angle) * mag + Math.random() * 6000 - 3000, 
+                        Math.sin(angle) * mag + Math.random() * 6000 - 3000
+                    ),
+                )
+            }
         }
         if (rightMouseDown
         ) {
@@ -142,7 +208,12 @@ async function gameLoop() {
         updateTowers(game);
         updateEnemies(game);
         updateProjectiles(game);
+        updateHomes(game);
+        updateNotes(game);
     }
+
+    game.timer++;
+
     requestAnimationFrame(gameLoop);
 }
 

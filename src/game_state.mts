@@ -11,7 +11,8 @@ export type Projectile = {
 export type Resource = {
     x: number,
     y: number,
-    amount: number
+    amount: number,
+    totalAmount: number
 }
 
 export enum TowerType {
@@ -69,20 +70,39 @@ export type Enemy = {
 }
 
 export enum Screen {
-    TITLE, GAME
+    TITLE, GAME, DEAD
 }
+
+export enum NoteType {
+    TEXT, RING
+}
+
+type Note = {
+    x: number,
+    y: number,
+    lifetimeRemaining: number,
+} & ({
+    type: NoteType.TEXT,
+    text: string
+} | {
+    type: NoteType.RING,
+    radius: number
+});
 
 // single monolithic object containing the entire state of the game
 export type GameState = {
     towers: Tower[],
     enemies: Enemy[],
     towerProjectiles: Projectile[],
-    enemyProjectiles: Projectile[]
+    enemyProjectiles: Projectile[],
+    notes: Note[],
     money: number,
     totalMoney: number,
     towerCost: number,
     homeCost: number,
     screen: Screen,
     homes: Home[],
-    resources: Resource[]
+    resources: Resource[],
+    timer: number,
+    homeRadius: number,
 }

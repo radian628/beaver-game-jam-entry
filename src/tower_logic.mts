@@ -1,5 +1,5 @@
 import { getMousePos, keycombo, keycomboindex } from "./controls.mjs";
-import { GameState, Projectile, Tower, TowerType } from "./game_state.mjs";
+import { GameState, NoteType, Projectile, Tower, TowerType } from "./game_state.mjs";
 
 export function getAngleToMouse(xp: number, yp: number) {
     const { x, y } = getMousePos();
@@ -53,6 +53,9 @@ export function createDefaultTower(x: number, y: number, fireKeys: string[]): To
 export function updateTowers(game: GameState) {
     game.towers.forEach(tower => {
         tower.onUpdate(tower);
+        if (tower.fireTimeRemaining == 0) {
+            game.notes.push({ x: tower.x, y: tower.y, radius: 30, lifetimeRemaining: 30, type: NoteType.RING });
+        }
         if (keycomboindex(tower.fireKeys, tower.fireKeyIndices)) {
             const projectile = tower.onFire(tower);
             if (projectile) game.towerProjectiles.push(projectile);
