@@ -61,10 +61,16 @@ async function gameLoop() {
         window.alert("canvas error that should nver happen");
         throw "";
     }
-
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     if (game.screen == Screen.TITLE) {
-
+        ctx.fillStyle = "#00000022";
+        ctx.fillRect(0,0,canvas.width, canvas.height);
+        ctx.fillStyle = "#ffffffaa"
+        ctx.beginPath();
+        ctx.arc(canvas.width/2, canvas.height/2,Math.min(canvas.height, canvas.width)/2, 0, 2*Math.PI);
+        ctx.fill();
+        ctx.endPath();
     } else if (game.screen == Screen.GAME) {
 
         const scalefactor = window.innerHeight/(viewBottom - viewTopLeft.y);
@@ -86,8 +92,6 @@ async function gameLoop() {
                 const mousepos = getMousePos();
                 game.towers.push(createDefaultTower(mousepos.x, mousepos.y, getAllKeysDown()));
             }
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             const sf = window.innerHeight / (viewBottom - viewTopLeft.y);
             ctx.scale(sf, sf);
