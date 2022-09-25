@@ -261,7 +261,8 @@ async function gameLoop() {
                         ],
                         timer: 0,
                         homeRadius: 250,
-                        homeProximityRequirement: 1000
+                        homeProximityRequirement: 1000,
+                        homeMinimumProximityRequirement: 500
                     };
                     game.screen = Screen.GAME;
                 }
