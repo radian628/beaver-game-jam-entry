@@ -1,5 +1,6 @@
 import { getAllKeysDown, getMousePos, keycombo, rightMouseDown, setRightMouseDown, viewBottom, viewTopLeft } from "./controls.mjs";
 import { enemyTextures, towerTextures, GameState, NoteType } from "./game_state.mjs";
+import { placePosition } from "./index.js";
 import { getAngleToMouse } from "./tower_logic.mjs";
 const imageCache = new Map<string, HTMLImageElement>();
 const canvas: HTMLCanvasElement = document.getElementById("canvas") as HTMLCanvasElement;
@@ -152,12 +153,41 @@ export async function drawGame(ctx: CanvasRenderingContext2D, game: GameState){
             ctx.stroke();
         }
     }
+
+
+    ctx.strokeStyle = "white";
+    ctx.font = "50px TexGyreAdventor";
+    ctx.lineWidth = 5;
+    if (placePosition.enabled) {
+
+
+        ctx.lineWidth = game.homeProximityRequirement - game.homeMinimumProximityRequirement;
+        ctx.strokeStyle = "#ffffff22";
+        ctx.beginPath();
+        ctx.arc(placePosition.x, placePosition.y, (game.homeMinimumProximityRequirement + game.homeProximityRequirement) / 2, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.lineWidth = 5;
+        drawOutlinedText(ctx, "home proximity range", 
+        placePosition.x, -15 + placePosition.y - (game.homeMinimumProximityRequirement + game.homeProximityRequirement) / 2);
+
+        ctx.lineWidth = 5;
+        ctx.font = "30px TexGyreAdventor";
+        ctx.fillStyle = "#ff333322";
+        ctx.beginPath();
+        ctx.arc(placePosition.x, placePosition.y, game.homeRadius, 0, Math.PI * 2);
+        ctx.fill();
+        drawOutlinedText(ctx, "max collection distance", 
+        placePosition.x, -15 + placePosition.y - game.homeRadius);
+
+    }
+
     ctx.textAlign = "left";
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.lineWidth = 10;
     ctx.font = "48px TexGyreAdventor";
     drawOutlinedText(ctx, "$" + game.money, 10, 50);
     drawOutlinedText(ctx, "Score: " + game.totalMoney, 10, 100);
+
 }
 
 

@@ -115,5 +115,6 @@ export type GameState = {
     resources: Resource[],
     timer: number,
     homeRadius: number,
-    homeProximityRequirement: number
+    homeProximityRequirement: number,
+    homeMinimumProximityRequirement: number
 }
