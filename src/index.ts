@@ -41,9 +41,23 @@ function drawOutlinedText(ctx: CanvasRenderingContext2D, text: string, x: number
     ctx.fillText(text, x, y);
 }
 
+function arrayEq<T>(a: T[], b: T[]) {
+    if (a.length != b.length) return false;
+    for (let i = 0; i < a.length; i++) {
+        if (a[i] != b[i]) return false;
+    }
+    return true;
+}
+
+function isRepeatKeybind(keys: string[]) {
+    for (let t of game.towers) {
+        if (arrayEq(t.fireKeys, keys)) return true;
+    }
+    return false;
+}
 
 async function gameLoop() {
-    if (rightMouseDown && getAllKeysDown().length != 0) {
+    if (rightMouseDown && getAllKeysDown().length != 0 && !isRepeatKeybind(getAllKeysDown())) {
         setRightMouseDown(false);
         const mousepos = getMousePos();
         game.towers.push(createDefaultTower(mousepos.x, mousepos.y, getAllKeysDown()));

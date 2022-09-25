@@ -60,10 +60,10 @@ function controlLoop() {
     
     let xpercent = mousePosScreen.x / window.innerWidth * 100;
     let ypercent = mousePosScreen.y / window.innerHeight * 100;
-    if (xpercent > 95) movementX = -Math.min(40, 1 / (1 - xpercent * 0.01));
-    if (xpercent < 5) movementX = Math.min(40, 1 / (xpercent * 0.01));
-    if (ypercent > 95) movementY = -Math.min(40, 1 / (1 - ypercent * 0.01));
-    if (ypercent < 5) movementY = Math.min(40, 1 / (ypercent * 0.01));;
+    if (xpercent > 95) movementX = -Math.min(10, 1 / (1 - xpercent * 0.01));
+    if (xpercent < 5) movementX = Math.min(10, 1 / (xpercent * 0.01));
+    if (ypercent > 95) movementY = -Math.min(10, 1 / (1 - ypercent * 0.01));
+    if (ypercent < 5) movementY = Math.min(10, 1 / (ypercent * 0.01));;
 
     const factor = (viewBottom - viewTopLeft.y) / window.innerHeight;
     //if (mouseDown) {
