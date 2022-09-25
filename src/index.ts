@@ -20,7 +20,7 @@ let game: GameState = {
     towerProjectiles: [],
     enemyProjectiles: [],
     money: 0,
-    screen: Screen.GAME,
+    screen: Screen.TITLE,
     homes: [
         { x: 0, y: 0, hp: 1000, maxHP: 1000 },
         { x: 550, y: 550, hp: 1000, maxHP: 1000 }
@@ -56,7 +56,7 @@ function isRepeatKeybind(keys: string[]) {
 }
 
 async function gameLoop() {
-    
+
     if (!ctx) {
         window.alert("Failed to create canvas context.");
         throw new Error("stupid canvas isnt working");
@@ -65,7 +65,7 @@ async function gameLoop() {
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if(game.screen == Screen.TITLE){
-
+        
     }
     else if(game.screen == Screen.GAME){
         canvas.style.backgroundSize = (600*50/(viewBottom - viewTopLeft.y))/ +"%";
