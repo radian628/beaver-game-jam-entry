@@ -15,7 +15,7 @@ export function createDefaultTower(x: number, y: number, fireKeys: string[]): To
         ammo: 10,
         maxAmmo: 10,
         fireTimeRemaining: 0,
-        fireTimeCooldown: 80,
+        fireTimeCooldown: 200,
         fireKeyIndices: fireKeys.map(e => -1),
         fireKeys,
         type: TowerType.DEFAULT,

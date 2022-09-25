@@ -58,7 +58,7 @@ function isRepeatKeybind(keys: string[]) {
 async function gameLoop() {
 
     canvas.style.backgroundPosition = "right " + viewTopLeft.x + "px bottom " + viewTopLeft.y + "px";
-    if (Math.random() > 0.98) {
+    if (Math.random() > 0.99) {
         game.enemies.push(
             createDefaultEnemy(Math.random() * 3000 - 1500, Math.random() * 3000 - 1500),
         )
@@ -96,12 +96,6 @@ async function gameLoop() {
     });
     for (let t of game.towers) {
         //ctx.filter = `hue-rotate(${t.type * 75}deg)`;
-        ctx.lineWidth = 5;
-        ctx.strokeStyle = "white";
-        ctx.beginPath();
-        ctx.arc(t.x, t.y, 75, 0, Math.PI * 2 * (1 - t.fireTimeRemaining / t.fireTimeCooldown));
-        ctx.stroke();
-
         ctx.save();
         ctx.drawImage(await getimg(towerTextures[t.type].base), t.x - 25, t.y - 25, 50, 50);
         ctx.translate(t.x, t.y);
@@ -118,6 +112,13 @@ async function gameLoop() {
         ctx.strokeText(t.fireKeys.join("+"), 0,10);
         ctx.fillText(t.fireKeys.join("+"), 0, 10);
         ctx.restore();
+
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = "hsla(200, 75%, 75%, 0.6)";
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, 45, 0, Math.PI * 2 * (1 - t.fireTimeRemaining / t.fireTimeCooldown));
+        ctx.stroke();
+
     }
     for (let t of game.enemies) {
         ctx.save();
