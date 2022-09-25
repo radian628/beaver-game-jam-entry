@@ -56,8 +56,9 @@ function isRepeatKeybind(keys: string[]) {
 }
 
 async function gameLoop() {
-    canvas.style.backgroundSize = (600*50/(viewBottom - viewTopLeft.y))/ +"%";
-    canvas.style.backgroundPosition = "left " + (-viewTopLeft.x) + "px top " + (-viewTopLeft.y) + "px";
+    const scalefactor = window.innerHeight/(viewBottom - viewTopLeft.y);
+    canvas.style.backgroundPosition = "" + (-viewTopLeft.x * scalefactor) + "px " + (-viewTopLeft.y * scalefactor) + "px";
+    canvas.style.backgroundSize = (600000/(viewBottom - viewTopLeft.y)) +"px";
     if (Math.random() > 0.99) {
         game.enemies.push(
             createDefaultEnemy(Math.random() * 3000 - 1500, Math.random() * 3000 - 1500),
