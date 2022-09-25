@@ -21,8 +21,8 @@ export enum TowerType {
 
 export const towerTextures: Record<TowerType, { base: string, cannon: string }> = {
     [TowerType.DEFAULT]: {
-        base: "./assets/tower_base.png",
-        cannon: "./assets/tower_cannon.png"
+        base: "./src/assets/tower_base.png",
+        cannon: "./src/assets/tower_cannon.png"
     }
 }
 // player-controlled towers
@@ -55,7 +55,7 @@ export enum EnemyType {
 }
 
 export const enemyTextures: Record<EnemyType, string> = {
-    [EnemyType.DEFAULT]: "./assets/enemy.png"
+    [EnemyType.DEFAULT]: "./src/assets/enemy.png"
 }
 // game enemies
 export type Enemy = {
