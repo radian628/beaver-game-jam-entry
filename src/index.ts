@@ -57,6 +57,7 @@ function isRepeatKeybind(keys: string[]) {
 }
 
 async function gameLoop() {
+    canvas.style.backgroundPosition = "left " + viewTopLeft.x + "px top " + viewTopLeft.y + "px";
     if (rightMouseDown && getAllKeysDown().length != 0 && !isRepeatKeybind(getAllKeysDown())) {
         setRightMouseDown(false);
         const mousepos = getMousePos();
