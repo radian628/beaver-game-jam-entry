@@ -28,7 +28,7 @@ export async function getimg(url: string): Promise<HTMLImageElement> {
 export async function drawTitle(ctx: CanvasRenderingContext2D, game: GameState){
     ctx.fillStyle = "#00000022";
     ctx.fillRect(0,0,canvas.width, canvas.height);
-    ctx.fillStyle = "#ffffff99"
+    ctx.fillStyle = "#ffffff99";
     ctx.beginPath();
     ctx.arc(canvas.width/2, canvas.height/2,Math.min(canvas.height, canvas.width)/2, 0, 2*Math.PI);
     ctx.fill();
