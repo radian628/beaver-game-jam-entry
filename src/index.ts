@@ -1,4 +1,4 @@
-import { getMousePos, keycombo, rightMouseDown, setRightMouseDown, viewBottom, viewTopLeft } from "./controls.mjs";
+import { getAllKeysDown, getMousePos, keycombo, rightMouseDown, setRightMouseDown, viewBottom, viewTopLeft } from "./controls.mjs";
 import { getimg } from "./draw.mjs";
 import { createDefaultEnemy, updateEnemies } from "./enemy_logic.mjs";
 import { enemyTextures, GameState, Screen, towerTextures } from "./game_state.mjs";
@@ -41,12 +41,14 @@ function drawOutlinedText(ctx: CanvasRenderingContext2D, text: string, x: number
     ctx.fillText(text, x, y);
 }
 
+
 async function gameLoop() {
-    if (rightMouseDown) {
-        const mousepos = getMousePos();
-        game.towers.push(createDefaultTower(mousepos.x, mousepos.y, ["A"]));
+    if (rightMouseDown && getAllKeysDown().length != 0) {
         setRightMouseDown(false);
+        const mousepos = getMousePos();
+        game.towers.push(createDefaultTower(mousepos.x, mousepos.y, getAllKeysDown()));
     }
+
 
     if (!ctx) {
         window.alert("Failed to create canvas context.");
@@ -55,11 +57,12 @@ async function gameLoop() {
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.font = "48px TexGyreAdventor";
 
     const sf = window.innerHeight / (viewBottom - viewTopLeft.y);
     ctx.scale(sf, sf);
     ctx.translate(-viewTopLeft.x, -viewTopLeft.y);
+
+    ctx.font = "48px TexGyreAdventor";
 
     ctx.fillStyle = "red";
     game.towerProjectiles.forEach(t => {
