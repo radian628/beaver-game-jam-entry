@@ -15,6 +15,7 @@ export function createDefaultEnemy(x: number, y: number): Enemy {
         x, y,
         hp: 100,
         maxHP: 100,
+        radius: 10,
         onFire: (enemy: Enemy, game: GameState) => {
             let angle = Math.atan2(enemy.y - game.home.y, enemy.x - game.home.x);
             let mag = distance(game.home, enemy);

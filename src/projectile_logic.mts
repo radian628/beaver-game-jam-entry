@@ -9,7 +9,7 @@ function updateSingleProjType<T extends (Tower | Enemy)>(projList: Projectile[],
         proj.lifetimeRemaining--;
         towerOrEnemyList.forEach(enemy => {
             const dist = distance(proj, enemy as (Tower | Enemy));
-            if (dist < proj.radius) {
+            if (dist < proj.radius + (((enemy as Enemy).radius as number | undefined) ?? 0)) {
                 proj.onHitTarget(enemy, proj);
             }
         })
