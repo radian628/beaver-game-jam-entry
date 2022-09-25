@@ -1,6 +1,6 @@
 const keysDown = new Map<string, boolean>();
 const keysDownIndex = new Map<string, number>();
-let mousePos = { x: 0, y: 0 }
+let mousePos = { x: 300, y: 300 }
 let mousePosScreen = { x: 0, y: 0 }
 
 export let mouseDown = false;
@@ -60,10 +60,10 @@ function controlLoop() {
     
     let xpercent = mousePosScreen.x / window.innerWidth * 100;
     let ypercent = mousePosScreen.y / window.innerHeight * 100;
-    if (xpercent > 70) movementX = -Math.min(40, 1 / (1 - xpercent * 0.01));
-    if (xpercent < 30) movementX = Math.min(40, 1 / (xpercent * 0.01));
-    if (ypercent > 70) movementY = -Math.min(40, 1 / (1 - ypercent * 0.01));
-    if (ypercent < 30) movementY = Math.min(40, 1 / (ypercent * 0.01));;
+    if (xpercent > 95) movementX = -Math.min(40, 1 / (1 - xpercent * 0.01));
+    if (xpercent < 5) movementX = Math.min(40, 1 / (xpercent * 0.01));
+    if (ypercent > 95) movementY = -Math.min(40, 1 / (1 - ypercent * 0.01));
+    if (ypercent < 5) movementY = Math.min(40, 1 / (ypercent * 0.01));;
 
     const factor = (viewBottom - viewTopLeft.y) / window.innerHeight;
     //if (mouseDown) {
@@ -103,4 +103,8 @@ export function keycomboindex(keys: string[], indices: number[]) {
 
 export function getMousePos(): { x: number, y: number } {
     return { ...mousePos };
+}
+
+export function getAllKeysDown() {
+    return Array.from(keysDown.entries()).filter(entry => entry[1]).map(e => e[0]);
 }
