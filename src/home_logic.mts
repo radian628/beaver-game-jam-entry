@@ -6,7 +6,7 @@ export function updateHomes(game: GameState) {
         game.homes.forEach(home => {
             let hasResources = false;
             game.resources.forEach(resource => {
-                if (distance(home, resource) < game.homeRadius) {
+                if (distance(home, resource) < game.homeRadius && !hasResources) {
                     game.money++;
                     game.totalMoney++;
                     resource.amount--;

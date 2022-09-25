@@ -32,6 +32,21 @@ export function updateProjectiles(game: GameState) {
     game.towerProjectiles = game.towerProjectiles.filter(p => p.lifetimeRemaining > 0);
     game.enemyProjectiles = game.enemyProjectiles.filter(p => p.lifetimeRemaining > 0);
 
+    game.enemies.forEach(e => {
+        if (e.hp <= 0) {
+            for (let i = 0; i < 200; i++) {
+                let angle = Math.random() * Math.PI * 2;
+                game.particles.push({
+                    x: e.x, y: e.y,
+                    dx: Math.cos(angle) * Math.random() * 24,
+                    dy: Math.sin(angle) * Math.random() * 24,
+                    lifetimeRemaining: Math.random() * 140,
+                    color: `rgb(${Math.random() * 50 + 200}, ${Math.random() * 150}, ${Math.random() * 150})`
+                });
+            }
+        }
+    });
+
     game.towers = game.towers.filter(t => t.hp > 0);
     game.enemies = game.enemies.filter(t => t.hp > 0);
     game.homes = game.homes.filter(t => t.hp > 0);

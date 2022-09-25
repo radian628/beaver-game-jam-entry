@@ -4,6 +4,7 @@ import { createDefaultEnemy, updateEnemies } from "./enemy_logic.mjs";
 import { enemyTextures, GameState, NoteType, Screen, towerTextures } from "./game_state.mjs";
 import { updateHomes } from "./home_logic.mjs";
 import { updateNotes } from "./note_logic.mjs";
+import { updateParticles } from "./particle_logic.mjs";
 import { updateProjectiles } from "./projectile_logic.mjs";
 import { createDefaultTower, getAngleToMouse, updateTowers } from "./tower_logic.mjs";
 import { distance } from "./utils.mjs";
@@ -20,11 +21,12 @@ const ctx = canvas.getContext("2d");
 let game: GameState = {
     towers: [],
     enemies: [],
+    particles: [],
     towerProjectiles: [],
     enemyProjectiles: [],
     notes: [],
     resources: [...new Array(300).fill(0).map(() => {
-        const amount = Math.random() * 25 + 25;
+        const amount = 30
         return {
             x: Math.random() * 15000 - 7500,
             y: Math.random() * 15000 - 7500,
@@ -40,7 +42,8 @@ let game: GameState = {
         { x: 0, y: 0, hp: 1000, maxHP: 1000 },
     ],
     timer: 0,
-    homeRadius: 250
+    homeRadius: 250,
+    homeProximityRequirement: 1000
 }
 
 game.towers.push(
@@ -107,6 +110,23 @@ function createTowerHomeUI(x: number, y: number) {
                 x: pastMousePos.x,
                 y: pastMousePos.y,
                 text: "Home is out of range of resources.",
+                lifetimeRemaining: 120, type: NoteType.TEXT
+            });
+            return;
+        }
+
+        isoutofrange = true;
+        game.homes.forEach(h => {
+            if (distance(pastMousePos, h) < game.homeProximityRequirement) {
+                isoutofrange = false;
+            }
+        }); 
+
+        if (isoutofrange) {
+            game.notes.push({
+                x: pastMousePos.x,
+                y: pastMousePos.y,
+                text: "Home is out of range of other homes.",
                 lifetimeRemaining: 120, type: NoteType.TEXT
             });
             return;
@@ -205,7 +225,7 @@ async function gameLoop() {
         if (game.timer % 600 == 0) {
             let angle = Math.random() * Math.PI * 2;
             let mag = Math.random() * 3000 + 8000;
-            for (let i = 0; i < game.timer / 400; i++) {
+            for (let i = 0; i < game.timer / 1500; i++) {
                 game.enemies.push(
                     createDefaultEnemy(
                         Math.cos(angle) * mag + Math.random() * 6000 - 3000,
@@ -223,6 +243,7 @@ async function gameLoop() {
         updateProjectiles(game);
         updateHomes(game);
         updateNotes(game);
+        updateParticles(game);
     }
 
     game.timer++;
