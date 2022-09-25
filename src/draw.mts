@@ -30,10 +30,35 @@ export async function drawTitle(ctx: CanvasRenderingContext2D, game: GameState){
     ctx.fillRect(0,0,canvas.width, canvas.height);
     ctx.fillStyle = "#ffffff99";
     ctx.beginPath();
-    ctx.arc(canvas.width/2, canvas.height/2,Math.min(canvas.height, canvas.width)/2, 0, 2*Math.PI);
+    ctx.arc(canvas.width/2, canvas.height/2, Math.min(canvas.height, canvas.width)/2, 0, 2*Math.PI);
     ctx.fill();
+    ctx.lineWidth = 5;
+    ctx.stroke();
     ctx.closePath();
-
+    ctx.beginPath();
+    if(getMousePos().x)
+        ctx.arc(canvas.width/2, canvas.height/2, Math.min(canvas.height, canvas.width)/2, 0, 0.5*Math.PI);
+        ctx.fillStyle = "00FF00AA";
+    //if mouse bad
+        ctx.arc(canvas.width/2, canvas.height/2, Math.min(canvas.height, canvas.width)/2, 0.5*Math.PI, Math.PI);
+        ctx.fillStyle = "FF0000AA";
+    ctx.closePath();
+    ctx.textAlign = "center";
+    ctx.font = "64px TexGyreAdventor";
+    drawOutlinedText(ctx, "Control Freak", canvas.width/2, canvas.height/4);
+    drawOutlinedText(ctx, "😃", canvas.width/2+Math.min(canvas.width,canvas.height)/4, canvas.height*3/4);
+    drawOutlinedText(ctx, "😒", canvas.width/2-Math.min(canvas.width,canvas.height)/4, canvas.height*3/4);
+    ctx.font = "40px TexGyreAdventor";
+    drawOutlinedText(ctx, "A GAME by Adrian and Will", canvas.width/2, canvas.height/2.5);
+    ctx.beginPath();
+    ctx.lineWidth = 10;
+    ctx.moveTo(canvas.width/2 - Math.min(canvas.width, canvas.height)/2,canvas.height/2);
+    ctx.lineTo(canvas.width/2 + Math.min(canvas.width, canvas.height)/2,canvas.height/2);
+    ctx.stroke();
+    ctx.moveTo(canvas.width/2,canvas.height/2);
+    ctx.lineTo(canvas.width/2,canvas.height/2 + Math.min(canvas.width, canvas.height)/2);
+    ctx.stroke();
+    ctx.closePath();
 }
 export async function drawGame(ctx: CanvasRenderingContext2D, game: GameState){
     const sf = window.innerHeight/(viewBottom - viewTopLeft.y);
