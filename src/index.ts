@@ -19,6 +19,7 @@ let game: GameState = {
     enemies: [],
     towerProjectiles: [],
     enemyProjectiles: [],
+    resources: [],
     money: 0,
     screen: Screen.TITLE,
     homes: [

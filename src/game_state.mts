@@ -8,6 +8,12 @@ export type Projectile = {
     radius: number
 }
 
+export type Resource = {
+    x: number,
+    y: number,
+    amount: number
+}
+
 export enum TowerType {
     DEFAULT
 }
@@ -74,5 +80,6 @@ export type GameState = {
     enemyProjectiles: Projectile[]
     money: number,
     screen: Screen,
-    homes: Home[]
+    homes: Home[],
+    resources: Resource[]
 }
